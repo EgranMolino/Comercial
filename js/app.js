@@ -10,7 +10,7 @@ const WA_BASE = "https://wa.me/" + (CONFIG.whatsappNumero || "");
 
 function esc(s) { return (s || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
 
-function renderBloque(b, ctxId) {
+function renderBloque(b, ctxId, liveData) {
   switch (b.t) {
     case "p": return `<p class="blk-p">${esc(b.x)}</p>`;
     case "label": return `<div class="blk-label">${esc(b.x)}</div>`;
@@ -25,11 +25,22 @@ function renderBloque(b, ctxId) {
         <tbody>${b.rows.map(r => `<tr>${r.map(c => `<td>${esc(c)}</td>`).join("")}</tr>`).join("")}</tbody>
       </table></div>`;
     case "objecion": return renderObjecionAcordeon(b.nombre, b.detras, b.responder, b.dialogo, b.testimonio, ctxId + "_" + b.nombre.slice(0, 10));
+    case "objeciones-dinamicas": return (liveData && liveData.objeciones ? liveData.objeciones : [])
+      .map(o => renderObjecionAcordeon(o.objecion, o.detras, o.responder, o.ejemplo, { texto: o.testimonioTexto, autor: o.testimonioAutor }, ctxId))
+      .join("");
+    case "matriz-dinamica": return renderMatrizTabla(liveData && liveData.matriz ? liveData.matriz : []);
     default: return "";
   }
 }
 
-function renderSeccionCompleta(sec) {
+function renderMatrizTabla(filas) {
+  return `<div class="blk-table-wrap"><table class="blk-table">
+      <thead><tr><th>Situación</th><th>% desc. máximo</th><th>Logística</th><th>Forma de pago</th><th>Volumen mínimo</th></tr></thead>
+      <tbody>${filas.map(f => `<tr><td>${esc(f.situacion)}</td><td>${esc(f.descuento)}</td><td>${esc(f.logistica)}</td><td>${esc(f.pago)}</td><td>${esc(f.volumen)}</td></tr>`).join("")}</tbody>
+    </table></div>`;
+}
+
+function renderSeccionCompleta(sec, liveData) {
   const leida = seccionEstaLeida(sec.id);
   return `
     <div class="seccion-card" id="sec-${sec.id}">
@@ -38,7 +49,7 @@ function renderSeccionCompleta(sec) {
         <h3>${esc(sec.titulo)}</h3>
         <button class="leida-btn ${leida ? "on" : ""}" data-marcar="${sec.id}" title="Marcar como leída">${leida ? "✓ Leída" : "Marcar leída"}</button>
       </div>
-      <div class="seccion-body">${sec.contenido.map(b => renderBloque(b, sec.id)).join("")}</div>
+      <div class="seccion-body">${sec.contenido.map(b => renderBloque(b, sec.id, liveData)).join("")}</div>
     </div>`;
 }
 
@@ -126,16 +137,23 @@ function screenAprendizaje() {
   app.innerHTML = shell(html, "aprendizaje");
 }
 
-function screenParte(parteId) {
+async function screenParte(parteId) {
   const parte = PARTES.find(p => p.id === parteId);
   if (!parte) return screenAprendizaje();
+
+  const tieneBloque = (tipo) => parte.secciones.some(s => s.contenido.some(b => b.t === tipo));
+  const liveData = {};
+  if (tieneBloque("objeciones-dinamicas")) liveData.objeciones = await getObjeciones();
+  if (tieneBloque("matriz-dinamica")) liveData.matriz = await getMatriz();
+
   const html = `
     ${header(parte.numero !== null ? "Parte " + parte.numero : "Prólogo", parte.titulo, "aprendizaje")}
     <div class="parte-detalle">
-      ${parte.secciones.map(renderSeccionCompleta).join("")}
+      ${parte.secciones.map(s => renderSeccionCompleta(s, liveData)).join("")}
     </div>`;
   app.innerHTML = shell(html, "aprendizaje");
   attachMarcarLeidaHandlers(() => screenParte(parteId));
+  attachAcordeonHandlers();
 }
 
 // ---------------------------------------------------------------- MODO CAMPO
