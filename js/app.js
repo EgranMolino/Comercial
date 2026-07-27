@@ -47,7 +47,7 @@ function renderSeccionCompleta(sec, liveData) {
       <div class="seccion-head">
         <span class="seccion-num">${sec.id.match(/^\d/) ? sec.id : ""}</span>
         <h3>${esc(sec.titulo)}</h3>
-        <button class="leida-btn ${leida ? "on" : ""}" data-marcar="${sec.id}" title="Marcar como leída">${leida ? "✓ Leída" : "Marcar leída"}</button>
+        <button class="leida-btn ${leida ? "on" : ""}" data-marcar="${sec.id}" title="${leida ? "Marcar como no leída" : "Marcar como leída"}">${leida ? "✓ Leída" : "Marcar leída"}</button>
       </div>
       <div class="seccion-body">${sec.contenido.map(b => renderBloque(b, sec.id, liveData)).join("")}</div>
     </div>`;
@@ -146,11 +146,18 @@ async function screenParte(parteId) {
   if (tieneBloque("objeciones-dinamicas")) liveData.objeciones = await getObjeciones();
   if (tieneBloque("matriz-dinamica")) liveData.matriz = await getMatriz();
 
+  const idxParte = PARTES.findIndex(p => p.id === parteId);
+  const siguiente = PARTES[idxParte + 1];
+  const siguienteHtml = siguiente
+    ? `<button class="siguiente-parte-btn" data-nav="parte:${siguiente.id}">Siguiente: ${esc(siguiente.titulo)} →</button>`
+    : `<button class="siguiente-parte-btn" data-nav="aprendizaje">✓ Completaste el manual — Volver al índice</button>`;
+
   const html = `
     ${header(parte.numero !== null ? "Parte " + parte.numero : "Prólogo", parte.titulo, "aprendizaje")}
     <div class="parte-detalle">
       ${parte.secciones.map(s => renderSeccionCompleta(s, liveData)).join("")}
-    </div>`;
+    </div>
+    ${siguienteHtml}`;
   app.innerHTML = shell(html, "aprendizaje");
   attachMarcarLeidaHandlers(() => screenParte(parteId));
   attachAcordeonHandlers();
@@ -177,6 +184,10 @@ async function screenEscenario(escId) {
   app.innerHTML = shell(header(esc_.titulo, "Armando tu resumen…", "campo"), "campo");
 
   const bloques = esc_.secciones.map(id => SECCIONES_POR_ID[id]).filter(Boolean);
+  const tieneBloqueEsc = (tipo) => bloques.some(s => s.contenido.some(b => b.t === tipo));
+  const liveDataEsc = {};
+  if (tieneBloqueEsc("matriz-dinamica")) liveDataEsc.matriz = await getMatriz();
+  if (tieneBloqueEsc("objeciones-dinamicas")) liveDataEsc.objeciones = await getObjeciones();
   let objecionesHtml = "";
   if (esc_.extras.objeciones && esc_.extras.objeciones.length) {
     const todas = await getObjeciones();
@@ -193,7 +204,7 @@ async function screenEscenario(escId) {
   const html = `
     ${header(esc_.titulo, esc_.bajada, "campo")}
     ${herramientaHtml}
-    ${bloques.map(renderSeccionCompleta).join("")}
+    ${bloques.map(s => renderSeccionCompleta(s, liveDataEsc)).join("")}
     ${objecionesHtml}
     ${whatsappCTA()}`;
   app.innerHTML = shell(html, "campo");
@@ -388,7 +399,7 @@ function attachMarcarLeidaHandlers(rerender) {
   document.querySelectorAll("[data-marcar]").forEach(btn => {
     btn.addEventListener("click", (ev) => {
       ev.stopPropagation();
-      marcarSeccionLeida(btn.getAttribute("data-marcar"));
+      toggleSeccionLeida(btn.getAttribute("data-marcar"));
       if (rerender) rerender();
     });
   });

@@ -28,10 +28,13 @@ function saveStore(store) {
   try { localStorage.setItem(STORE_KEY, JSON.stringify(store)); } catch (e) { /* noop */ }
 }
 
-function marcarSeccionLeida(seccionId) {
+function toggleSeccionLeida(seccionId) {
   const s = loadStore();
-  s.seccionesLeidas[seccionId] = true;
+  const nuevoEstado = !s.seccionesLeidas[seccionId];
+  if (nuevoEstado) s.seccionesLeidas[seccionId] = true;
+  else delete s.seccionesLeidas[seccionId];
   saveStore(s);
+  return nuevoEstado;
 }
 
 function seccionEstaLeida(seccionId) {
@@ -58,5 +61,5 @@ function getChecklistState(checklistId) {
 }
 
 if (typeof module !== "undefined") {
-  module.exports = { loadStore, saveStore, marcarSeccionLeida, seccionEstaLeida, progresoParte, toggleChecklistItem, getChecklistState };
+  module.exports = { loadStore, saveStore, toggleSeccionLeida, seccionEstaLeida, progresoParte, toggleChecklistItem, getChecklistState };
 }

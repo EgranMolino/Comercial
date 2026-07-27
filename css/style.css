@@ -104,6 +104,12 @@ a{color:inherit; text-decoration:none;}
 .parte-tile b{font-size:14.5px; color:var(--verde-osc); display:block;}
 
 .parte-detalle{padding:16px;}
+.siguiente-parte-btn{
+  display:block; width:calc(100% - 32px); margin:0 16px 20px;
+  background:var(--verde); color:#fff; border:none; border-radius:12px;
+  padding:14px 16px; font-size:13.5px; font-weight:700; text-align:center;
+  box-shadow:var(--sombra);
+}
 
 /* ---------- SECCION CARDS ---------- */
 .seccion-card{background:var(--carta); border:1px solid var(--linea); border-radius:14px; padding:16px; margin-bottom:14px; box-shadow:var(--sombra);}
