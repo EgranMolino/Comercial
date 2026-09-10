@@ -60,6 +60,16 @@ function getChecklistState(checklistId) {
   return loadStore().checklists[checklistId] || {};
 }
 
+const PIN_KEY = "egran_pin_ok";
+
+function appDesbloqueada() {
+  try { return localStorage.getItem(PIN_KEY) === "1"; } catch (e) { return false; }
+}
+
+function desbloquearApp() {
+  try { localStorage.setItem(PIN_KEY, "1"); } catch (e) { /* noop */ }
+}
+
 if (typeof module !== "undefined") {
-  module.exports = { loadStore, saveStore, toggleSeccionLeida, seccionEstaLeida, progresoParte, toggleChecklistItem, getChecklistState };
+  module.exports = { loadStore, saveStore, toggleSeccionLeida, seccionEstaLeida, progresoParte, toggleChecklistItem, getChecklistState, appDesbloqueada, desbloquearApp };
 }

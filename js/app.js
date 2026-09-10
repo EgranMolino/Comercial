@@ -448,6 +448,39 @@ function attachMarcarLeidaHandlers(rerender) {
   });
 }
 
+// ---------------------------------------------------------------- ACCESO (PIN)
+
+function screenBloqueo() {
+  app.innerHTML = `
+    <div class="lock-screen">
+      <div class="lock-card">
+        <div class="lock-ic">🔒</div>
+        <h1>Egran</h1>
+        <p>Ingresá el PIN del equipo comercial para entrar.</p>
+        <input type="password" inputmode="numeric" id="lock-pin" placeholder="PIN" autofocus />
+        <button id="lock-btn">Entrar</button>
+        <p id="lock-error" class="lock-error"></p>
+      </div>
+    </div>`;
+  const intentar = () => {
+    const val = document.getElementById("lock-pin").value.trim();
+    if (val && val === CONFIG.pinAcceso) {
+      desbloquearApp();
+      router();
+    } else {
+      document.getElementById("lock-error").textContent = "PIN incorrecto. Probá de nuevo.";
+    }
+  };
+  document.getElementById("lock-btn").addEventListener("click", intentar);
+  document.getElementById("lock-pin").addEventListener("keydown", (ev) => { if (ev.key === "Enter") intentar(); });
+  document.getElementById("lock-pin").focus();
+}
+
+function checkAccess() {
+  if (appDesbloqueada()) { router(); return; }
+  screenBloqueo();
+}
+
 // ---------------------------------------------------------------- ROUTER
 
 function router() {
@@ -469,5 +502,5 @@ document.addEventListener("click", (ev) => {
   if (navEl) { location.hash = navEl.getAttribute("data-nav"); }
 });
 
-window.addEventListener("hashchange", router);
-window.addEventListener("DOMContentLoaded", router);
+window.addEventListener("hashchange", () => { if (appDesbloqueada()) router(); });
+window.addEventListener("DOMContentLoaded", checkAccess);

@@ -22,6 +22,8 @@ const CONFIG = {
   objecionesCSV: "https://docs.google.com/spreadsheets/d/1F6yH9ohvHJWaL39Q56ef2AdGTADiW0_fGPPtKC0e64c/export?format=csv",
   // Número de WhatsApp del equipo comercial (con código de país, sin +, sin espacios) o vacío para elegir contacto al enviar
   whatsappNumero: "5493512817038",
+  // PIN de acceso a la app. Freno simple para curiosos, no es seguridad real (el código es público).
+  pinAcceso: "19382026",
 };
 
 // ---------- Datos de respaldo (se usan si la planilla no está conectada o falla la carga) ----------
