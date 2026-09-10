@@ -14,6 +14,14 @@ const ESCENARIOS = [
     extras: { objeciones: ["No conozco la marca"], herramienta: null },
   },
   {
+    id: "nueva_derivacion",
+    icono: "📨",
+    titulo: "Me llegó una consulta o derivación nueva",
+    bajada: "Un lead del molino, no de mi propia búsqueda",
+    secciones: ["4.9", "2.2"],
+    extras: { objeciones: [], herramienta: null },
+  },
+  {
     id: "primera_repeticion",
     icono: "🔁",
     titulo: "Voy a ver cómo fue la primera compra",
