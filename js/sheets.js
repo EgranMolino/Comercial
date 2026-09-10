@@ -21,7 +21,7 @@ const CONFIG = {
   // Planilla: "Egran - Objeciones" (creada en tu Drive)
   objecionesCSV: "https://docs.google.com/spreadsheets/d/1F6yH9ohvHJWaL39Q56ef2AdGTADiW0_fGPPtKC0e64c/export?format=csv",
   // Número de WhatsApp del equipo comercial (con código de país, sin +, sin espacios) o vacío para elegir contacto al enviar
-  whatsappNumero: "",
+  whatsappNumero: "5493512817038",
 };
 
 // ---------- Datos de respaldo (se usan si la planilla no está conectada o falla la carga) ----------

@@ -223,7 +223,6 @@ const PARTES = [
         { t: "p", x: "Mes a mes: revisión completa de la cartera asignada, repasando el semáforo de inactividad." },
         { t: "p", x: "Año a año: las negociaciones de temporada marcan los grandes hitos, con revisión periódica del mix de cada cuenta importante." },
         { t: "p", x: "En la revisión diaria sumá las consultas de antecedentes y las oportunidades derivadas: respondé los antecedentes en 24 horas, y agendá el vencimiento de los diez días corridos desde cada derivación formal (ver 4.9)." },
-        { t: "callout", kind: "warning", title: "Nota", x: "los números de frecuencia y búsqueda de nuevos clientes de esta sección son una primera hipótesis. La definición final se ajusta a la carga real de cada zona." },
       ]},
       { id: "4.7", titulo: "Matriz de Situación: qué se puede negociar según el cliente", contenido: [
         { t: "p", x: "Tener límites claros sobre qué se puede negociar y qué no, para no tener que improvisar un número en plena reunión, definidos por Fernando y Agustín." },

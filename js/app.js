@@ -291,6 +291,8 @@ function screenSemana() {
     "Definí mis 5 contactos nuevos de la semana",
     "Definí mis 2 primeras visitas de la semana",
     "Dejé un día flexible para clientes en riesgo y registro",
+    "Revisé mis derivaciones abiertas y agendé la acción con vencimiento (10 días corridos)",
+    "Reporté el resultado de las derivaciones que ya gestioné",
   ];
   const state = getChecklistState("rutina_semanal");
   const html = `
