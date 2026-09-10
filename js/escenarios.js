@@ -19,7 +19,7 @@ const ESCENARIOS = [
     titulo: "Me llegó una consulta o derivación nueva",
     bajada: "Un lead del molino, no de mi propia búsqueda",
     secciones: ["4.9", "2.2"],
-    extras: { objeciones: [], herramienta: null },
+    extras: { objeciones: [], herramienta: "derivacion" },
   },
   {
     id: "primera_repeticion",

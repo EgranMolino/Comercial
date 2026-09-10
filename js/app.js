@@ -29,6 +29,11 @@ function renderBloque(b, ctxId, liveData) {
       .map(o => renderObjecionAcordeon(o.objecion, o.detras, o.responder, o.ejemplo, { texto: o.testimonioTexto, autor: o.testimonioAutor }, ctxId))
       .join("");
     case "matriz-dinamica": return renderMatrizTabla(liveData && liveData.matriz ? liveData.matriz : []);
+    case "timeline": return `<div class="timeline">${b.steps.map((s, i) => `
+        <div class="timeline-step">
+          <div class="timeline-dot">${i + 1}</div>
+          <div class="timeline-content"><b>${esc(s.label)}</b><small>${esc(s.detail)}</small></div>
+        </div>`).join("")}</div>`;
     default: return "";
   }
 }
@@ -200,6 +205,7 @@ async function screenEscenario(escId) {
   let herramientaHtml = "";
   if (esc_.extras.herramienta === "matriz") herramientaHtml = await renderMatrizTool();
   if (esc_.extras.herramienta === "semaforo") herramientaHtml = renderSemaforoTool();
+  if (esc_.extras.herramienta === "derivacion") herramientaHtml = renderDerivacionTool();
 
   const html = `
     ${header(esc_.titulo, esc_.bajada, "campo")}
@@ -212,6 +218,7 @@ async function screenEscenario(escId) {
   attachMarcarLeidaHandlers(() => screenEscenario(escId));
   attachMatrizHandlers();
   attachSemaforoHandlers();
+  attachDerivacionHandlers();
 }
 
 // ---------------------------------------------------------------- HERRAMIENTA: MATRIZ
@@ -278,6 +285,40 @@ function attachSemaforoHandlers() {
     else if (dias >= 30) { color = "amarillo"; accion = "Contacto simple, con tono de chequeo y no de reclamo. Por ejemplo: “¿cómo venís, necesitás algo?”."; }
     else { color = "verde"; accion = "Todavía está dentro de un ciclo normal. No hace falta ninguna acción especial todavía."; }
     out.innerHTML = `<div class="semaforo-result semaforo-${color}"><b>${dias} días sin comprar</b><p>${accion}</p></div>`;
+  });
+}
+
+// ---------------------------------------------------------------- HERRAMIENTA: ESTADO DE DERIVACIÓN
+
+function renderDerivacionTool() {
+  return `
+    <div class="tool-card">
+      <div class="tool-head"><span class="tool-ic">📨</span><b>Estado de mi derivación</b></div>
+      <p class="tool-hint">¿Qué día te llegó la derivación formal?</p>
+      <div class="semaforo-input">
+        <input type="date" id="derivacion-fecha" />
+        <button id="derivacion-btn" class="semaforo-check">Ver estado</button>
+      </div>
+      <div id="derivacion-resultado"></div>
+    </div>`;
+}
+
+function attachDerivacionHandlers() {
+  const btn = document.getElementById("derivacion-btn");
+  if (!btn) return;
+  btn.addEventListener("click", () => {
+    const val = document.getElementById("derivacion-fecha").value;
+    const out = document.getElementById("derivacion-resultado");
+    if (!val) { out.innerHTML = `<p class="blk-p">Elegí una fecha.</p>`; return; }
+    const fecha = new Date(val + "T00:00:00");
+    const hoy = new Date(); hoy.setHours(0, 0, 0, 0);
+    const dias = Math.round((hoy - fecha) / 86400000);
+    let color, texto;
+    if (dias < 0) { color = "verde"; texto = "Esa fecha todavía no llegó."; }
+    else if (dias > 10) { color = "rojo"; texto = `Pasaste el plazo de gestión por ${dias - 10} día${dias - 10 === 1 ? "" : "s"}. Reportá igual, con la conclusión a la que llegaste — es mejor que el silencio.`; }
+    else if (dias >= 8) { color = "naranja"; texto = `Te quedan ${10 - dias} día${10 - dias === 1 ? "" : "s"} corridos para gestionar y darle al Ejecutivo Comercial Interno una respuesta concreta.`; }
+    else { color = "verde"; texto = `Estás en plazo: llevás ${dias} de los 10 días corridos. Te quedan ${10 - dias}.`; }
+    out.innerHTML = `<div class="semaforo-result semaforo-${color}"><b>${dias} día${dias === 1 ? "" : "s"} desde la derivación</b><p>${texto}</p></div>`;
   });
 }
 

@@ -255,6 +255,14 @@ const PARTES = [
       ]},
       { id: "4.9", titulo: "Nuevos clientes: búsqueda propia y oportunidades derivadas", contenido: [
         { t: "p", x: "Conseguir clientes nuevos es una responsabilidad permanente del vendedor: incluye la búsqueda propia en su zona y la gestión de las consultas que llegan por los canales del molino (web, campañas, contenido). Las derivaciones se suman a la búsqueda propia, no la reemplazan." },
+        { t: "timeline", steps: [
+          { label: "Llega la consulta", detail: "Por la web, campañas o contenido del molino. El Ejecutivo Comercial Interno la registra en el CRM y evalúa si califica." },
+          { label: "Antecedentes — 24 horas", detail: "Si cae en tu zona, te consultan si ya la trabajaste. Tenés 24 horas para responder con detalle." },
+          { label: "Derivación formal", detail: "Si nunca la trabajaste, te llega la derivación oficial." },
+          { label: "Gestión — 10 días corridos", detail: "Tenés diez días para gestionar y darle al Ejecutivo Comercial Interno una respuesta concreta." },
+          { label: "Transferencia", detail: "Facturado el primer pedido, la cuenta se te transfiere formalmente con toda su información." },
+          { label: "Reporte a los 30 días", detail: "Le contás al Responsable Comercial cómo resultó y el potencial del segundo pedido." },
+        ]},
         { t: "label", x: "Cómo se recibe y califica una consulta" },
         { t: "p", x: "El Ejecutivo Comercial Interno recibe las consultas de los canales del molino, las registra en el CRM y evalúa si corresponden a un potencial cliente." },
         { t: "p", x: "Criterios de calificación inicial para una compra directa: un pedido de aproximadamente $3.000.000, pago anticipado, y un costo de flete que no supere el 5% del valor del pedido. Son criterios de calificación de la consulta, no modifican la Matriz de Situación (4.7): las condiciones para elaborar y negociar la propuesta siguen esa matriz." },
@@ -422,6 +430,11 @@ const PARTES = [
         { t: "label", x: "A quién reportar" },
         { t: "p", x: "La cartera propia, los resultados de zona y la información de mercado van al Responsable Comercial. Las acciones y resultados de oportunidades derivadas van al Ejecutivo Comercial Interno, que las sigue en el CRM hasta que se definen (antecedentes en 24 horas, conclusión a los diez días corridos, reporte a los 30 días de una cuenta transferida — ver 4.9). Las oportunidades estratégicas, los conflictos de zona o cartera y las excepciones a la matriz se elevan al Directorio." },
         { t: "p", x: "Las devoluciones sobre el manual y las herramientas también son parte de la comunicación comercial: si una situación se repite, falta un argumento o una herramienta resulta difícil de usar, compartí el caso concreto — la experiencia del equipo mejora la forma de trabajar." },
+        { t: "timeline", steps: [
+          { label: "Vos", detail: "Generás la información: una objeción nueva, un movimiento de competencia, una cuenta en riesgo, una derivación gestionada." },
+          { label: "Responsable Comercial / Ejecutivo Comercial Interno", detail: "Reciben tu reporte según el tema — cartera y mercado al Responsable Comercial, derivaciones al Ejecutivo Comercial Interno." },
+          { label: "Directorio", detail: "Solo para lo estratégico: oportunidades grandes, conflictos de zona o cartera, excepciones a la matriz." },
+        ]},
         { t: "table", headers: ["Qué reportamos", "Por qué es relevante", "Cuándo", "Canal"], rows: [
           ["Movimientos de competencia", "Puede cambiar una decisión comercial rápido", "Apenas se detecta", "WhatsApp al grupo comercial"],
           ["Objeciones nuevas o que se repiten mucho", "Si varios clientes dicen lo mismo, es una señal para la empresa, no solo un problema individual", "Mensual (salvo urgencia)", "Mail o reunión de equipo"],
